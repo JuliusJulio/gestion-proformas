@@ -310,7 +310,7 @@ async function cargarDashboard() {
   const dgiiSolicitado =
     solicitadas
       .filter(
-        p => p.organismo === 'dgii'
+        p => p.organismo === 'DGII'
       )
       .reduce(
         (a, b) =>
@@ -321,7 +321,7 @@ async function cargarDashboard() {
   const dgiiAprobado =
     aprobadas
       .filter(
-        p => p.organismo === 'dgii'
+        p => p.organismo === 'DGII'
       )
       .reduce(
         (a, b) =>
@@ -332,7 +332,7 @@ async function cargarDashboard() {
   const dgiiRechazado =
     rechazadas
       .filter(
-        p => p.organismo === 'dgii'
+        p => p.organismo === 'DGII'
       )
       .reduce(
         (a, b) =>
