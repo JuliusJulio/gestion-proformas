@@ -307,10 +307,10 @@ async function cargarDashboard() {
       0
     );
 
-  const dgiSolicitado =
+  const dgiiSolicitado =
     solicitadas
       .filter(
-        p => p.organismo === 'DGI'
+        p => p.organismo === 'dgii'
       )
       .reduce(
         (a, b) =>
@@ -318,10 +318,10 @@ async function cargarDashboard() {
         0
       );
 
-  const dgiAprobado =
+  const dgiiAprobado =
     aprobadas
       .filter(
-        p => p.organismo === 'DGI'
+        p => p.organismo === 'dgii'
       )
       .reduce(
         (a, b) =>
@@ -329,10 +329,10 @@ async function cargarDashboard() {
         0
       );
 
-  const dgiRechazado =
+  const dgiiRechazado =
     rechazadas
       .filter(
-        p => p.organismo === 'DGI'
+        p => p.organismo === 'dgii'
       )
       .reduce(
         (a, b) =>
@@ -450,14 +450,14 @@ async function cargarDashboard() {
   document.getElementById('montoRechazado').textContent =
     `RD$ ${montoRechazado.toLocaleString()}`;
 
-  document.getElementById('dgiSolicitado').textContent =
-    `RD$ ${dgiSolicitado.toLocaleString()}`;
+  document.getElementById('dgiiSolicitado').textContent =
+    `RD$ ${dgiiSolicitado.toLocaleString()}`;
 
-  document.getElementById('dgiAprobado').textContent =
-    `RD$ ${dgiAprobado.toLocaleString()}`;
+  document.getElementById('dgiiAprobado').textContent =
+    `RD$ ${dgiiAprobado.toLocaleString()}`;
 
-  document.getElementById('dgiRechazado').textContent =
-    `RD$ ${dgiRechazado.toLocaleString()}`;
+  document.getElementById('dgiiRechazado').textContent =
+    `RD$ ${dgiiRechazado.toLocaleString()}`;
 
   document.getElementById('dgaSolicitado').textContent =
     `RD$ ${dgaSolicitado.toLocaleString()}`;
