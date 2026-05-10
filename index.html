@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión de Proformas</title>
+
+  <link rel="stylesheet" href="styles.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+
+<div class="sidebar">
+  <h2>Proformas</h2>
+
+  <button onclick="showSection('dashboard')">Dashboard</button>
+  <button onclick="showSection('contratos')">Contratos</button>
+  <button onclick="showSection('proformas')">Proformas</button>
+</div>
+
+<div class="main-content">
+
+  <section id="dashboard-section">
+    <h1>Dashboard</h1>
+
+    <div class="cards">
+
+      <div class="card">
+        <h3>Contratos Activos</h3>
+        <p id="contratosActivos">0</p>
+      </div>
+
+      <div class="card">
+        <h3>Proformas Aprobadas</h3>
+        <p id="proformasAprobadas">0</p>
+      </div>
+
+      <div class="card">
+        <h3>Monto Aprobado</h3>
+        <p id="montoAprobado">RD$0</p>
+      </div>
+
+      <div class="card">
+        <h3>Proformas Vencidas</h3>
+        <p id="proformasVencidas">0</p>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="contratos-section" class="hidden">
+
+    <h1>Nuevo Contrato</h1>
+
+    <form id="contratoForm">
+
+      <input type="text" id="nombreContrato" placeholder="Nombre contrato" required>
+
+      <textarea id="descripcionCompra" placeholder="Descripción compra"></textarea>
+
+      <input type="text" id="tipoCompra" placeholder="Tipo compra">
+
+      <input type="text" id="departamento" placeholder="Departamento">
+
+      <label>Fecha Inicio</label>
+      <input type="date" id="fechaInicio">
+
+      <label>Fecha Final</label>
+      <input type="date" id="fechaFinal">
+
+      <input type="number" id="montoContrato" placeholder="Monto contrato">
+
+      <input type="number" id="montoItbis" placeholder="Monto ITBIS">
+
+      <input type="number" id="cantidadProformas" placeholder="Cantidad proformas">
+
+      <textarea id="observaciones" placeholder="Observaciones"></textarea>
+
+      <button type="submit">Guardar Contrato</button>
+
+    </form>
+
+  </section>
+
+  <section id="proformas-section" class="hidden">
+
+    <h1>Nueva Proforma</h1>
+
+    <form id="proformaForm">
+
+      <select id="contratoSelect"></select>
+
+      <select id="organismo">
+        <option value="DGI">DGI</option>
+        <option value="DGA">DGA</option>
+      </select>
+
+      <input type="number" id="montoSolicitado" placeholder="Monto solicitado">
+
+      <label>Fecha Solicitud</label>
+      <input type="date" id="fechaSolicitud">
+
+      <select id="estado">
+        <option>Borrador</option>
+        <option>Solicitado</option>
+        <option>En revisión</option>
+        <option>Aprobado</option>
+        <option>Rechazado</option>
+      </select>
+
+      <label>Fecha Aprobación</label>
+      <input type="date" id="fechaAprobacion">
+
+      <textarea id="comentarios" placeholder="Comentarios"></textarea>
+
+      <button type="submit">Guardar Proforma</button>
+
+    </form>
+
+    <table>
+
+      <thead>
+        <tr>
+          <th>Contrato</th>
+          <th>Organismo</th>
+          <th>Monto</th>
+          <th>Estado</th>
+          <th>Vencimiento</th>
+        </tr>
+      </thead>
+
+      <tbody id="tablaProformas"></tbody>
+
+    </table>
+
+  </section>
+
+</div>
+
+<script src="config.js"></script>
+<script src="supabase.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
