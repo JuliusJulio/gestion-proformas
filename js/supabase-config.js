@@ -11,7 +11,7 @@
    ========================================================== */
 
 const SUPABASE_CONFIG = {
-  URL: 'https://yfylciaoxggfgvvrckxc.supabase.co/rest/v1/',           // Ej: 'https://xxxxxxxxxxxx.supabase.co'
+  URL: 'https://yfylciaoxggfgvvrckxc.supabase.co',           // Ej: 'https://xxxxxxxxxxxx.supabase.co'
   ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlmeWxjaWFveGdnZmd2dnJja3hjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxMDUzMDcsImV4cCI6MjA5NDY4MTMwN30.-rnhK44Mx_bclWusPiPKkNKLd4if5tTBuWBdf4zZ2qo', // Ej: 'eyJhbGciOiJI...' (un texto muy largo)
 };
 
