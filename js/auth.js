@@ -114,3 +114,27 @@ async function handleLogin(e) {
     btn.disabled = false;
   }
 }
+// ========== CONTROL DE INACTIVIDAD ==========
+const INACTIVITY_TIMEOUT_MIN = 30;   // minutos de inactividad permitidos
+let inactivityTimer = null;
+let lastActivity = Date.now();
+
+function resetInactivityTimer() {
+  lastActivity = Date.now();
+}
+
+function checkInactivity() {
+  const minutosInactivo = (Date.now() - lastActivity) / 60000;
+  if (minutosInactivo >= INACTIVITY_TIMEOUT_MIN) {
+    clearInterval(inactivityTimer);
+    alert('Sesión cerrada por inactividad.');
+    supabaseClient.auth.signOut().then(() => location.reload());
+  }
+}
+
+function startInactivityWatcher() {
+  ['click', 'keydown', 'mousemove', 'scroll', 'touchstart'].forEach(evt => {
+    document.addEventListener(evt, resetInactivityTimer, { passive: true });
+  });
+  inactivityTimer = setInterval(checkInactivity, 30000); // revisa cada 30 seg
+}
