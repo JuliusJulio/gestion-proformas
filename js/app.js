@@ -137,6 +137,8 @@ async function init() {
   setupListeners();
   renderAll();
   setTimeout(checkTableOverflow, 100);
+   
+  startInactivityWatcher();
 }
 
 function setupListeners() {
