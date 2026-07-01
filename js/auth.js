@@ -115,7 +115,7 @@ async function handleLogin(e) {
   }
 }
 // ========== CONTROL DE INACTIVIDAD ==========
-const INACTIVITY_TIMEOUT_MIN = 30;   // minutos de inactividad permitidos
+const INACTIVITY_TIMEOUT_MIN = 1;   // minutos de inactividad permitidos
 let inactivityTimer = null;
 let lastActivity = Date.now();
 
