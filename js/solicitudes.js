@@ -85,8 +85,9 @@ function renderFiltros(containerId) {
 function renderTablaSolicitudes(containerId, data) {
   const totalImpuesto = data.reduce((a, s) => a + (s.impuestoExonerar || 0), 0);
   const totalMonto = data.reduce((a, s) => a + (s.montoDOP || 0), 0);
-
-  const rows = data.map(s => {
+  const visibles = data.slice(0, limiteVisible);
+   
+  const rows = visibles.map(s => {
     const estado = estadoActual(s);
     const tipoC = tipoCompraDerivado(s);
     const dMH = diasMH(s);
@@ -181,7 +182,7 @@ function renderTablaSolicitudes(containerId, data) {
           ${empty}
           ${data.length > 0 ? `
             <tr class="totals-row">
-              <td colspan="11" style="text-align:right;font-size:12px">TOTALES · ${data.length} registros</td>
+              <td colspan="11" style="text-align:right;font-size:12px">TOTALES · ${data.length} registros${data.length > limiteVisible ? ` (mostrando ${limiteVisible})` : ''}</td>
               <td class="money">${fmt(totalMonto)}</td>
               <td class="money">${fmt(totalImpuesto)}</td>
               <td colspan="2"></td>
@@ -190,6 +191,13 @@ function renderTablaSolicitudes(containerId, data) {
         </tbody>
       </table>
     </div>
+   ${data.length > limiteVisible ? `
+  <div style="padding:14px;text-align:center;border-top:1px solid var(--border)">
+    <button class="btn btn-secondary btn-sm" onclick="verMas()">
+      Ver 50 más (${data.length - limiteVisible} restantes)
+    </button>
+  </div>
+` : ''}
     <div class="card-footer">
       <span>Los totales se recalculan al modificar los filtros · Vigencia: ${CONFIG.VIGENCIA_MESES} meses</span>
       <span>Corporación Turística Cabo Rojo S.A.</span>
@@ -745,4 +753,8 @@ function onSearchInput(valor) {
       inp.setSelectionRange(inp.value.length, inp.value.length);
     }
   }, 300);
+}
+function verMas() {
+  limiteVisible += 50;
+  renderAll();
 }
