@@ -211,3 +211,23 @@ function escapeHtml(str) {
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
 }
+// ---------- FORMATO DE MONTOS EN INPUTS ----------
+function desformatearMonto(str) {
+  if (str === null || str === undefined) return 0;
+  const limpio = String(str).replace(/,/g, '').trim();
+  const n = parseFloat(limpio);
+  return isNaN(n) ? 0 : n;
+}
+
+function formatearMontoInput(valor) {
+  const n = typeof valor === 'number' ? valor : desformatearMonto(valor);
+  if (n === 0) return '';
+  return new Intl.NumberFormat('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(n);
+}
+
+function onBlurMonto(input) {
+  input.value = formatearMontoInput(input.value);
+}
