@@ -148,7 +148,7 @@ function renderModalContrato(c) {
         </div>
         <div class="form-group">
           <label>Monto Total</label>
-          <input type="number" id="fcMonto" value="${c ? c.montoTotal : ''}" step="0.01" placeholder="0.00">
+          <input type="text" id="fcMonto" value="${c ? formatearMontoInput(c.montoTotal) : ''}" onblur="onBlurMonto(this)" placeholder="0.00">
         </div>
       </div>
     </div>
@@ -195,7 +195,7 @@ async function guardarContrato() {
   const inicio = document.getElementById('fcInicio').value;
   const fin = document.getElementById('fcFin').value;
   const moneda = document.getElementById('fcMoneda').value;
-  const monto = parseFloat(document.getElementById('fcMonto').value) || 0;
+  const monto = desformatearMonto(document.getElementById('fcMonto').value);
   const cantProformas = parseInt(document.getElementById('fcCantProformas').value) || 0;
 
   // Validaciones
