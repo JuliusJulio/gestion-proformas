@@ -33,3 +33,4 @@ let filters = {
 let currentSection = 'dashboard';
 let editingSolicitudId = null;
 let editingContratoId = null;
+let limiteVisible = 50;
