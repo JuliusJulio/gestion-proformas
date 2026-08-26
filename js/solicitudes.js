@@ -39,7 +39,7 @@ function renderFiltros(containerId) {
   const html = `
     <div class="search-wrapper">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input type="text" class="search-input" placeholder="Buscar proveedor, solicitud..." value="${escapeHtml(filters.search)}" oninput="filters.search=this.value;renderAll()">
+      <input type="text" class="search-input" id="searchInput" placeholder="Buscar proveedor, solicitud..." value="${escapeHtml(filters.search)}" oninput="onSearchInput(this.value)">
     </div>
     <div class="filter-group">
       <span class="filter-label">Estado</span>
@@ -730,4 +730,19 @@ async function eliminarSolicitud(id) {
 
   cerrarModal();
   renderAll();
+}
+// ---------- BÚSQUEDA CON DEBOUNCE Y FOCO PRESERVADO ----------
+let searchTimer = null;
+function onSearchInput(valor) {
+  filters.search = valor;
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => {
+    renderAll();
+    // Restaurar foco y cursor al final
+    const inp = document.getElementById('searchInput');
+    if (inp) {
+      inp.focus();
+      inp.setSelectionRange(inp.value.length, inp.value.length);
+    }
+  }, 300);
 }
