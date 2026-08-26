@@ -43,40 +43,40 @@ function renderFiltros(containerId) {
     </div>
     <div class="filter-group">
       <span class="filter-label">Estado</span>
-      <select onchange="filters.estado=this.value;renderAll()">
+      <select onchange="filters.estado=this.value;limiteVisible=50;renderAll()">
         <option value="">Todos</option>
         ${ESTADOS.map(e => `<option value="${escapeHtml(e)}" ${filters.estado === e ? 'selected' : ''}>${escapeHtml(e)}</option>`).join('')}
       </select>
     </div>
     <div class="filter-group">
       <span class="filter-label">Depto</span>
-      <select onchange="filters.depto=this.value;renderAll()">
+      <select onchange="filters.depto=this.value;limiteVisible=50;renderAll()">
         <option value="">Todos</option>
         ${DEPARTAMENTOS.map(d => `<option value="${escapeHtml(d)}" ${filters.depto === d ? 'selected' : ''}>${escapeHtml(d)}</option>`).join('')}
       </select>
     </div>
     <div class="filter-group">
       <span class="filter-label">Tipo</span>
-      <select onchange="filters.tipoCompra=this.value;renderAll()">
+      <select onchange="filters.tipoCompra=this.value;limiteVisible=50;renderAll()">
         <option value="">Todos</option>
         ${tiposCompraFiltro.map(t => `<option value="${escapeHtml(t)}" ${filters.tipoCompra === t ? 'selected' : ''}>${escapeHtml(t)}</option>`).join('')}
       </select>
     </div>
     <div class="filter-group">
       <span class="filter-label">Vía</span>
-      <select onchange="filters.via=this.value;renderAll()">
+      <select onchange="filters.via=this.value;limiteVisible=50;renderAll()">
         <option value="">Todas</option>
         ${VIAS.map(v => `<option value="${escapeHtml(v)}" ${filters.via === v ? 'selected' : ''}>${escapeHtml(v.split('(')[0].trim())}</option>`).join('')}
       </select>
     </div>
     <div class="filter-group">
       <span class="filter-label">Mes</span>
-      <select onchange="filters.mes=this.value;renderAll()">
+      <select onchange="filters.mes=this.value;limiteVisible=50;renderAll()">
         <option value="">Todos</option>
         ${meses.map(m => `<option value="${m}" ${filters.mes === m ? 'selected' : ''}>${m}</option>`).join('')}
       </select>
     </div>
-    <button class="btn btn-ghost btn-sm" onclick="filters={estado:'',depto:'',tipoCompra:'',via:'',search:'',mes:''};renderAll()">Limpiar</button>
+    <button class="btn btn-ghost btn-sm" onclick="filters={estado:'',depto:'',tipoCompra:'',via:'',search:'',mes:''};limiteVisible=50;renderAll()">Limpiar</button>
   `;
   document.getElementById(containerId).innerHTML = html;
 }
@@ -743,6 +743,7 @@ async function eliminarSolicitud(id) {
 let searchTimer = null;
 function onSearchInput(valor) {
   filters.search = valor;
+  limiteVisible = 50;
   clearTimeout(searchTimer);
   searchTimer = setTimeout(() => {
     renderAll();
