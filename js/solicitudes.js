@@ -361,15 +361,15 @@ function renderModalSolicitud(s) {
         </div>
         <div class="form-group">
           <label>Monto Factura (moneda original)</label>
-          <input type="number" id="fMontoFact" value="${s ? s.montoFactura : ''}" step="0.01" oninput="recalcularMontoDOP()" placeholder="0.00">
+          <input type="text" id="fMontoFact" value="${s ? formatearMontoInput(s.montoFactura) : ''}" oninput="recalcularMontoDOP()" onblur="onBlurMonto(this); recalcularMontoDOP()" placeholder="0.00">
         </div>
         <div class="form-group">
           <label>Monto en DOP (calculado)</label>
-          <input type="number" id="fMontoDOP" value="${s ? s.montoDOP : ''}" step="0.01" placeholder="0.00">
+          <input type="text" id="fMontoDOP" value="${s ? formatearMontoInput(s.montoDOP) : ''}" onblur="onBlurMonto(this)" placeholder="0.00">
         </div>
         <div class="form-group full">
           <label>Impuesto a Exonerar (DOP) *</label>
-          <input type="number" id="fImpuesto" value="${s ? s.impuestoExonerar : ''}" step="0.01" placeholder="0.00">
+          <input type="text" id="fImpuesto" value="${s ? formatearMontoInput(s.impuestoExonerar) : ''}" onblur="onBlurMonto(this)" placeholder="0.00">
         </div>
       </div>
     </div>
@@ -624,9 +624,9 @@ function eliminarEntradaBitacora(idx) {
 function recalcularMontoDOP() {
   const moneda = document.getElementById('fMoneda').value;
   const tasa = parseFloat(document.getElementById('fTasa').value) || 1;
-  const monto = parseFloat(document.getElementById('fMontoFact').value) || 0;
+  const monto = desformatearMonto(document.getElementById('fMontoFact').value);
   const dop = moneda === 'USD' ? monto * tasa : monto;
-  document.getElementById('fMontoDOP').value = dop.toFixed(2);
+  document.getElementById('fMontoDOP').value = formatearMontoInput(dop);
 }
 
 // ---------- GUARDAR ----------
@@ -637,7 +637,7 @@ async function guardarSolicitud() {
   const desc = document.getElementById('fDesc').value.trim();
   const via = document.getElementById('fVia').value;
   const fechaSol = document.getElementById('fFechaSol').value;
-  const impuesto = parseFloat(document.getElementById('fImpuesto').value) || 0;
+  const impuesto = desformatearMonto(document.getElementById('fImpuesto').value);
 
   if (!proveedor) { alert('Selecciona un proveedor.'); return; }
   if (!depto) { alert('Selecciona un departamento.'); return; }
@@ -689,8 +689,8 @@ async function guardarSolicitud() {
     bitacora: tempBitacora,
     moneda: document.getElementById('fMoneda').value,
     tasaCambio: parseFloat(document.getElementById('fTasa').value) || 1,
-    montoFactura: parseFloat(document.getElementById('fMontoFact').value) || 0,
-    montoDOP: parseFloat(document.getElementById('fMontoDOP').value) || 0,
+    montoFactura: desformatearMonto(document.getElementById('fMontoFact').value),
+    montoDOP: desformatearMonto(document.getElementById('fMontoDOP').value),
     impuestoExonerar: impuesto,
     comentarios: document.getElementById('fComentarios').value.trim(),
   };
