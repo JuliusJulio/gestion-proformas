@@ -143,15 +143,6 @@ async function init() {
 
 function setupListeners() {
   // Listeners modal
-  const overlay = document.getElementById('modalOverlay');
-  if (overlay) {
-    overlay.addEventListener('click', (e) => {
-      if (e.target === e.currentTarget) cerrarModal();
-    });
-  }
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') cerrarModal();
-  });
 
   window.addEventListener('resize', () => {
     setTimeout(checkTableOverflow, 100);
