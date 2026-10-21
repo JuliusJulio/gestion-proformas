@@ -148,7 +148,13 @@ const api = {
         tasaCambio: parseFloat(s.tasa_cambio) || 1,
         montoFactura: parseFloat(s.monto_factura) || 0,
         montoDOP: parseFloat(s.monto_dop) || 0,
+        // Desglose de impuestos (Fase 1/3)
+        montoGravamen: parseFloat(s.monto_gravamen) || 0,
+        montoItbis: parseFloat(s.monto_itbis) || 0,
+        montoIsc: parseFloat(s.monto_isc) || 0,
+        // Total: cache en BD, siempre = gravamen + itbis + isc
         impuestoExonerar: parseFloat(s.impuesto_exonerar) || 0,
+        partidaArancelaria: s.partida_arancelaria || '',
         comentarios: s.comentarios || '',
       }));
     },
@@ -167,7 +173,22 @@ const api = {
           if (ord[i].numeroSolicitud) { numActual = ord[i].numeroSolicitud; break; }
         }
       }
-      return {
+      // ---------- Desglose de impuestos ----------
+      // El total SIEMPRE se calcula aquí: nunca se confía en un total
+      // enviado por el formulario, así no puede quedar descuadrado.
+      //
+      // Transición: mientras el modal viejo siga activo (Fase 3, antes
+      // de la Fase 4), no manda el desglose. En ese caso el campo único
+      // "Impuesto a Exonerar" era ITBIS y se guarda como tal.
+      const traeDesglose = ['montoGravamen', 'montoItbis', 'montoIsc']
+        .some(k => Object.prototype.hasOwnProperty.call(sol, k));
+
+      const gravamen = traeDesglose ? (Number(sol.montoGravamen) || 0) : 0;
+      const itbis    = traeDesglose ? (Number(sol.montoItbis)    || 0)
+                                    : (Number(sol.impuestoExonerar) || 0);
+      const isc      = traeDesglose ? (Number(sol.montoIsc)      || 0) : 0;
+
+      const row = {
         no_solicitud: numActual,
         contrato_id: sol.contratoId || null,
         proveedor_id: proveedorId,
@@ -182,9 +203,20 @@ const api = {
         tasa_cambio: sol.tasaCambio,
         monto_factura: sol.montoFactura,
         monto_dop: sol.montoDOP,
-        impuesto_exonerar: sol.impuestoExonerar,
+        monto_gravamen: gravamen,
+        monto_itbis: itbis,
+        monto_isc: isc,
+        impuesto_exonerar: gravamen + itbis + isc,
         comentarios: sol.comentarios || null,
       };
+
+      // Solo se toca la partida si el formulario la trae: así el modal
+      // viejo no borra una partida ya capturada.
+      if (sol.partidaArancelaria !== undefined) {
+        row.partida_arancelaria = sol.partidaArancelaria || null;
+      }
+
+      return row;
     },
 
     async _saveBitacora(solicitudId, bitacora) {
@@ -250,6 +282,7 @@ const api = {
         tipo,
         valor,
         dispara_vigencia: opts.disparaVigencia || false,
+        es_aduanas: opts.esAduanas || false,
         protegido: opts.protegido || false,
         orden: 999,
       });
@@ -273,6 +306,14 @@ const api = {
       const { error } = await supabaseClient.from('catalogos')
         .update({ dispara_vigencia: dispara })
         .eq('tipo', tipo)
+        .eq('valor', valor);
+      if (error) throw error;
+    },
+    // Marca/desmarca una vía como régimen aduanal (habilita el gravamen)
+    async toggleAduanas(valor, esAduanas) {
+      const { error } = await supabaseClient.from('catalogos')
+        .update({ es_aduanas: esAduanas })
+        .eq('tipo', 'VIA')
         .eq('valor', valor);
       if (error) throw error;
     },
