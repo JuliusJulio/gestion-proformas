@@ -15,6 +15,7 @@ let ESTADOS = [];
 let ESTADOS_VIGENCIA = [];
 let VIAS = [];
 let VIAS_ADUANAS = [];   // vías marcadas con es_aduanas en Catálogos
+let VIAS_PROTEGIDAS = [];   // vías que no se pueden eliminar (protegido en Catálogos)
 
 // ---------- DATOS PRINCIPALES (se cargan desde Supabase) ----------
 let solicitudes = [];
