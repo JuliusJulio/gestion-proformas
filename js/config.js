@@ -5,6 +5,7 @@
 const CONFIG = {
   // Vigencia y alertas
   VIGENCIA_MESES: 6,
+  VIGENCIA_APLICA_A_ADUANAS: false,  // la exoneración de importación se agota al despachar
   ALERTA_ADVERTENCIA_DIAS: 30,
   ALERTA_URGENTE_DIAS: 15,
 
