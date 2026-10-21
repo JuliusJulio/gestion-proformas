@@ -14,6 +14,7 @@ let TIPOS_CONTRATO = [];
 let ESTADOS = [];
 let ESTADOS_VIGENCIA = [];
 let VIAS = [];
+let VIAS_ADUANAS = [];   // vías marcadas con es_aduanas en Catálogos
 
 // ---------- DATOS PRINCIPALES (se cargan desde Supabase) ----------
 let solicitudes = [];
