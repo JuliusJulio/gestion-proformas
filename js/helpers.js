@@ -115,6 +115,7 @@ function fechaDisparoVigencia(sol) {
 
 // ---------- VIGENCIA ----------
 function fechaVencimiento(sol) {
+  if (!aplicaVigencia(sol)) return null;          // ← AGREGAR ESTA LÍNEA
   const fechaDisparo = fechaDisparoVigencia(sol);
   if (!fechaDisparo) return null;
   const d = new Date(fechaDisparo);
@@ -230,4 +231,60 @@ function formatearMontoInput(valor) {
 
 function onBlurMonto(input) {
   input.value = formatearMontoInput(input.value);
+}
+
+// ==========================================================
+//  RÉGIMEN ADUANAL (DGA) — Fase 2
+//  El código pregunta SIEMPRE por la bandera es_aduanas,
+//  nunca por el texto "DGA": así la vía se puede renombrar
+//  sin que el formulario deje de habilitar el gravamen.
+// ==========================================================
+
+function esViaAduanas(via) {
+  return VIAS_ADUANAS.includes(via);
+}
+
+function esSolicitudAduanal(sol) {
+  return esViaAduanas(sol && sol.via);
+}
+
+// Total a exonerar = suma de los tres conceptos
+function totalImpuestos(sol) {
+  if (!sol) return 0;
+  return (sol.montoGravamen || 0) + (sol.montoItbis || 0) + (sol.montoIsc || 0);
+}
+
+// ¿Esta solicitud genera vigencia de 6 meses y alertas de vencimiento?
+function aplicaVigencia(sol) {
+  if (!CONFIG.VIGENCIA_APLICA_A_ADUANAS && esSolicitudAduanal(sol)) return false;
+  return true;
+}
+
+// ---------- Etiquetas que cambian según la vía ----------
+function etiquetaNumero(via) {
+  return esViaAduanas(via) ? 'No. DUA / Declaración' : 'No. Solicitud (DGII/MH)';
+}
+
+function placeholderNumero(via) {
+  return esViaAduanas(via) ? 'Ej: 2026-DUA-004512' : 'Ej: 5270394';
+}
+
+function etiquetaFecha2(via) {
+  return esViaAduanas(via) ? 'F. Liquidación DGA' : 'F. Aprobación Min. Hacienda';
+}
+
+function etiquetaFecha3(via) {
+  return esViaAduanas(via) ? 'F. Aprobación Exoneración' : 'F. Aprobación DGII';
+}
+
+function etiquetaMontoFactura(via) {
+  return esViaAduanas(via) ? 'Valor CIF (moneda original)' : 'Monto Factura (moneda original)';
+}
+
+function etiquetaDias2(via) {
+  return esViaAduanas(via) ? 'Días DGA' : 'Días MH';
+}
+
+function etiquetaDias3(via) {
+  return esViaAduanas(via) ? 'Días Exoneración' : 'Días DGII';
 }
