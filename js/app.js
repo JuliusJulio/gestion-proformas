@@ -94,6 +94,7 @@ async function cargarDatosDesdeSupabase() {
     ESTADOS = cats.filter(c => c.tipo === 'ESTADO').map(c => c.valor);
     ESTADOS_VIGENCIA = cats.filter(c => c.tipo === 'ESTADO' && c.dispara_vigencia).map(c => c.valor);
     VIAS = cats.filter(c => c.tipo === 'VIA').map(c => c.valor);
+    VIAS_ADUANAS = cats.filter(c => c.tipo === 'VIA' && c.es_aduanas).map(c => c.valor);
 
     console.log('✅ Datos cargados:', {
       proveedores: proveedores.length,
