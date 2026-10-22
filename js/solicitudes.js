@@ -931,17 +931,20 @@ function onSearchInput(valor) {
   filters.search = valor;
   limiteVisible = 50;
   clearTimeout(searchTimer);
-  searchTimer = setTimeout(() => {
-    renderAll();
-    // Restaurar foco y cursor al final
-    const inp = document.getElementById('searchInput');
-    if (inp) {
-      inp.focus();
-      inp.setSelectionRange(inp.value.length, inp.value.length);
-    }
-  }, 300);
+  searchTimer = setTimeout(refrescarSoloTabla, 250);
 }
-function verMas() {
-  limiteVisible += 50;
-  renderAll();
+
+// Redibuja los resultados SIN tocar la barra de filtros: si se redibuja,
+// el input se destruye a media escritura y se pierden las teclas.
+function refrescarSoloTabla() {
+  const data = aplicarFiltros(solicitudes);
+  if (currentSection === 'dashboard') {
+    renderKPIs(data);
+    renderComposicionAhorro(data);
+    renderResumenEstados(data);
+    renderCharts(data);
+    renderTablaSolicitudes('dashTable', data);
+  } else {
+    renderTablaSolicitudes('solTable', data);
+  }
 }
