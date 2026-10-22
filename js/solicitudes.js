@@ -172,7 +172,10 @@ function renderTablaSolicitudes(containerId, data) {
         <span class="card-count">${data.length}</span>
       </div>
     </div>
-    <div class="table-wrapper">
+    <div class="scroll-top-mirror" id="${containerId}_scrollTop">
+      <div class="scroll-top-mirror-inner" id="${containerId}_scrollTopInner"></div>
+    </div>
+    <div class="table-wrapper" id="${containerId}_wrapper">
       <table>
         <thead>
           <tr>
@@ -218,6 +221,50 @@ function renderTablaSolicitudes(containerId, data) {
       <span>Corporación Turística Cabo Rojo S.A.</span>
     </div>
   `;
+   sincronizarScrollSuperior(containerId);
+}
+// ---------- BARRA DE SCROLL ESPEJO (arriba de la tabla) ----------
+function sincronizarScrollSuperior(containerId) {
+  const top = document.getElementById(containerId + '_scrollTop');
+  const inner = document.getElementById(containerId + '_scrollTopInner');
+  const wrapper = document.getElementById(containerId + '_wrapper');
+  if (!top || !inner || !wrapper) return;
+
+  const ajustar = () => {
+    const tabla = wrapper.querySelector('table');
+    if (!tabla) return;
+    inner.style.width = tabla.scrollWidth + 'px';
+    // Si no hay desbordamiento, la barra sobra
+    top.style.display = wrapper.scrollWidth > wrapper.clientWidth ? '' : 'none';
+  };
+
+  ajustar();
+  // Segunda pasada tras el layout (fuentes, anchos calculados)
+  setTimeout(ajustar, 60);
+
+  let bloqueado = false;
+  top.onscroll = () => {
+    if (bloqueado) return;
+    bloqueado = true;
+    wrapper.scrollLeft = top.scrollLeft;
+    bloqueado = false;
+  };
+  wrapper.onscroll = () => {
+    if (bloqueado) return;
+    bloqueado = true;
+    top.scrollLeft = wrapper.scrollLeft;
+    bloqueado = false;
+  };
+
+  if (!window._scrollMirrorResize) {
+    window._scrollMirrorResize = true;
+    window.addEventListener('resize', () => {
+      document.querySelectorAll('.scroll-top-mirror').forEach(el => {
+        const cid = el.id.replace('_scrollTop', '');
+        sincronizarScrollSuperior(cid);
+      });
+    });
+  }
 }
 
 // ---------- SECCIÓN COMPLETA SOLICITUDES ----------
