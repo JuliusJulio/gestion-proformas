@@ -290,7 +290,7 @@ function renderModalSolicitud(s) {
           <div class="help-text">Si cambia de número (re-sometimiento), regístralo en el evento correspondiente de la bitácora. El número actual será el del último evento.</div>
         </div>
         <div class="form-group" id="wrapPartida" style="display:none">
-          <label>Partida Arancelaria</label>
+          <label>Partida de Arancel</label>
           <input type="text" id="fPartida" value="${s ? escapeHtml(s.partidaArancelaria || '') : ''}" placeholder="Ej: 8703.23.90">
           <div class="help-text">Determina la tasa de gravamen en la liquidación.</div>
         </div>
@@ -405,7 +405,7 @@ function renderModalSolicitud(s) {
         <div style="padding:12px;background:var(--surface);display:flex;flex-direction:column;gap:10px">
 
           <div id="rowGravamen" style="display:none;align-items:center;gap:12px">
-            <label for="fGravamen" style="flex:1;margin:0;text-transform:none;letter-spacing:0;font-size:13px;font-weight:500;color:var(--text)">Gravamen arancelario</label>
+            <label for="fGravamen" style="flex:1;margin:0;text-transform:none;letter-spacing:0;font-size:13px;font-weight:500;color:var(--text)">Gravamen</label>
             <input type="text" id="fGravamen" value="${s ? formatearMontoInput(s.montoGravamen) : ''}"
                    oninput="recalcularTotalImpuestos()" onblur="onBlurMonto(this); recalcularTotalImpuestos()"
                    placeholder="0.00" style="width:200px;text-align:right;font-family:var(--mono)">
