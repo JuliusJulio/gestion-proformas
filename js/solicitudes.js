@@ -268,7 +268,7 @@ function renderModalSolicitud(s) {
   const viaOpts = VIAS.map(v => `<option value="${escapeHtml(v)}" ${s && s.via === v ? 'selected' : ''}>${escapeHtml(v)}</option>`).join('');
   const viaIni = s ? (s.via || '') : '';
 
-  document.getElementById('modalTitle').textContent = isEdit ? 'Editar Solicitud' : 'Nueva Solicitud de Exención';
+  document.getElementById('modalTitle').textContent = isEdit ? 'Editar Solicitud' : 'Solicitud de Exoneración';
 
   document.getElementById('modalBody').innerHTML = `
 
