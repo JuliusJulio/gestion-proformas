@@ -995,3 +995,8 @@ function refrescarSoloTabla() {
     renderTablaSolicitudes('solTable', data);
   }
 }
+
+function verMas() {
+  limiteVisible += 50;
+  refrescarSoloTabla();
+}
