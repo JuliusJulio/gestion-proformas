@@ -242,12 +242,11 @@ function renderKPIs(data) {
 
   const totalSol = data.reduce((a, s) => a + (s.impuestoExonerar || 0), 0);
   const totalApr = aprobados.reduce((a, s) => a + (s.impuestoExonerar || 0), 0);
-  // Tasa de aprobación sobre lo ya decidido: aprobado ÷ (aprobado + rechazado).
-  // Lo pendiente o en proceso no entra: todavía no es ni una cosa ni la otra.
+    // Tasa de aprobación por CANTIDAD de solicitudes ya decididas:
+  // aprobadas ÷ (aprobadas + rechazadas). Lo pendiente o en proceso no entra.
   // PENDIENTE (Opción B): reemplazar el startsWith por una bandera es_rechazo en Catálogos.
-  const totalRech = rechazados.reduce((a, s) => a + (s.impuestoExonerar || 0), 0);
-  const totalDecidido = totalApr + totalRech;
-  const tasaAprob = totalDecidido > 0 ? Math.round(totalApr / totalDecidido * 100) + '%' : '—';
+  const decididos = aprobados.length + rechazados.length;
+  const tasaAprob = decididos > 0 ? Math.round(aprobados.length / decididos * 100) + '%' : '—';
 
   const diasProm = aprobados.length > 0
     ? Math.round(aprobados.map(s => diasDesdeAprobacion(s)).filter(x => x !== null).reduce((a, b) => a + b, 0) / aprobados.length * 10) / 10
@@ -269,11 +268,11 @@ function renderKPIs(data) {
       <div class="kpi-value" style="color:var(--green-text)">RD$ ${fmt(totalApr)}</div>
       <div class="kpi-sub">${aprobados.length} aprobadas</div>
     </div>
-      <div class="kpi-card blue">
+   <div class="kpi-card blue">
       <div class="kpi-label">Tasa de Aprobación</div>
       <div class="kpi-value" style="color:var(--blue-text)">${tasaAprob}</div>
-      <div class="kpi-sub" title="Monto aprobado ÷ (monto aprobado + monto rechazado). Lo pendiente o en proceso no entra.">
-        ${totalDecidido > 0 ? `de lo ya decidido · ${aprobados.length} de ${aprobados.length + rechazados.length} exp.` : 'sin solicitudes decididas aún'}
+      <div class="kpi-sub" title="Solicitudes aprobadas ÷ (aprobadas + rechazadas). Lo pendiente o en proceso no entra.">
+        ${decididos > 0 ? `${aprobados.length} de ${decididos} solicitudes decididas` : 'sin solicitudes decididas aún'}
       </div>
     </div>
     </div>
