@@ -238,10 +238,16 @@ function renderKPIs(data) {
     const e = estadoActual(s);
     return e.startsWith('Sometido') || e === 'En revisión';
   });
-  const rechazados = data.filter(s => estadoActual(s).startsWith('Rechazado'));
+  const rechazados = data.filter(s => estadoActual(s).toLowerCase().startsWith('rechazado'));
 
   const totalSol = data.reduce((a, s) => a + (s.impuestoExonerar || 0), 0);
   const totalApr = aprobados.reduce((a, s) => a + (s.impuestoExonerar || 0), 0);
+  // Tasa de aprobación sobre lo ya decidido: aprobado ÷ (aprobado + rechazado).
+  // Lo pendiente o en proceso no entra: todavía no es ni una cosa ni la otra.
+  // PENDIENTE (Opción B): reemplazar el startsWith por una bandera es_rechazo en Catálogos.
+  const totalRech = rechazados.reduce((a, s) => a + (s.impuestoExonerar || 0), 0);
+  const totalDecidido = totalApr + totalRech;
+  const tasaAprob = totalDecidido > 0 ? Math.round(totalApr / totalDecidido * 100) + '%' : '—';
 
   const diasProm = aprobados.length > 0
     ? Math.round(aprobados.map(s => diasDesdeAprobacion(s)).filter(x => x !== null).reduce((a, b) => a + b, 0) / aprobados.length * 10) / 10
@@ -263,10 +269,13 @@ function renderKPIs(data) {
       <div class="kpi-value" style="color:var(--green-text)">RD$ ${fmt(totalApr)}</div>
       <div class="kpi-sub">${aprobados.length} aprobadas</div>
     </div>
-    <div class="kpi-card blue">
+      <div class="kpi-card blue">
       <div class="kpi-label">Tasa de Aprobación</div>
-      <div class="kpi-value" style="color:var(--blue-text)">${totalSol > 0 ? Math.round(totalApr / totalSol * 100) : 0}%</div>
-      <div class="kpi-sub">del monto solicitado</div>
+      <div class="kpi-value" style="color:var(--blue-text)">${tasaAprob}</div>
+      <div class="kpi-sub" title="Monto aprobado ÷ (monto aprobado + monto rechazado). Lo pendiente o en proceso no entra.">
+        ${totalDecidido > 0 ? `de lo ya decidido · ${aprobados.length} de ${aprobados.length + rechazados.length} exp.` : 'sin solicitudes decididas aún'}
+      </div>
+    </div>
     </div>
     <div class="kpi-card yellow">
       <div class="kpi-label">Días Vigencia Promedio</div>
